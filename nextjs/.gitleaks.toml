@@ -1,0 +1,4 @@
+title = "Next.js boilerplate secret scanning"
+
+[extend]
+useDefault = true

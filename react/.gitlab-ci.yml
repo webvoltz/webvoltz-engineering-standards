@@ -1,0 +1,23 @@
+include:
+  - local: /common/gitlab/quality.yml
+
+variables:
+  STACK_DIR: react
+
+secret-scan:
+  extends: .secret-scan-template
+
+dependency-audit:
+  extends: .dependency-audit-template
+
+quality:
+  extends: .quality-template
+
+commitlint:
+  extends: .commitlint-template
+
+test:
+  extends: .test-template
+
+build:
+  extends: .build-template

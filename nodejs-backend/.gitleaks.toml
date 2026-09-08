@@ -1,0 +1,4 @@
+title = "Node.js backend boilerplate secret scanning"
+
+[extend]
+useDefault = true

@@ -1,0 +1,26 @@
+{
+  "extends": "../common/tsconfig/strict.json",
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDir": ".",
+    "outDir": "dist",
+    "sourceMap": true,
+    "declaration": true,
+    "resolveJsonModule": true,
+    "verbatimModuleSyntax": true,
+    "types": ["node"]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.mts",
+    "src/**/*.cts",
+    "examples/**/*.ts",
+    "examples/**/*.mts",
+    "examples/**/*.cts",
+    "vitest.config.mts"
+  ],
+  "exclude": ["node_modules", "dist"]
+}
