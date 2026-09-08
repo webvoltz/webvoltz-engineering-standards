@@ -10,7 +10,7 @@
 [![Node](https://img.shields.io/badge/node-24.x-FFC107?style=flat-square&labelColor=111111)](#adoption)
 [![Commits](https://img.shields.io/badge/commits-conventional-FFC107?style=flat-square&labelColor=111111)](#shared-non-negotiable-policy)
 [![Secrets](https://img.shields.io/badge/secrets-gitleaks%20protected-FFC107?style=flat-square&labelColor=111111)](#shared-non-negotiable-policy)
-[![Usage](https://img.shields.io/badge/usage-internal%20%2F%20proprietary-111111?style=flat-square&labelColor=FFC107)](#)
+[![Usage](https://img.shields.io/badge/usage-internal%20%2F%20proprietary-111111?style=flat-square&labelColor=FFC107)](LICENSE)
 
 </div>
 
@@ -107,6 +107,10 @@ See each stack README for its additional framework-specific rules.
 Shared policy in `common/` affects every stack, so changes go through review, not a direct push:
 open a merge request, explain the rationale, and confirm `node common/policies/verify-all.mjs`
 still passes for all three stacks before requesting sign-off from the standards owner.
+
+## License
+
+Proprietary and confidential — internal WebVoltz use only. See [LICENSE](LICENSE).
 
 ---
 

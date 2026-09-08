@@ -2,6 +2,7 @@
   "name": "react-engineering-standards-template",
   "version": "0.0.0",
   "private": true,
+  "license": "UNLICENSED",
   "type": "module",
   "engines": {
     "node": ">=24 <25",
