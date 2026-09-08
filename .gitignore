@@ -1,0 +1,38 @@
+# Root-level safety net. Each stack directory (react/, nextjs/, nodejs-backend/)
+# owns its own .gitignore for stack-specific build output.
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+out/
+.next/
+.turbo/
+coverage/
+
+# Env files (keep committed examples)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editors/IDEs
+.vscode/
+.idea/
+*.swp
+
+# Caches
+.npm/
+.cache/
+*.tsbuildinfo
+
+docs
