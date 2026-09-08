@@ -61,7 +61,7 @@ quality, test, and build sequence.
 
 GitLab CI also runs commitlint over each merge-request or push commit range, using the shared
 template every stack inherits. See the repository root
-[README's GitLab CI commit-message enforcement section](../README.md#gitlab-ci-commit-message-enforcement)
+[README's commit linting in CI section](../README.md#commit-linting-in-ci)
 for the full branch-by-branch behavior.
 
 The build command assumes this template has been copied into a real React application. The empty
