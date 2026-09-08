@@ -1,57 +1,57 @@
 # Node.js backend engineering standards template
 
-This directory is a framework-neutral tooling template for a Node.js 24 LTS service using
-TypeScript and ECMAScript modules. Keep it beside the repository's `common/` directory and add
-service source inside this directory. The template intentionally contains no framework or
-application source.
+A framework-neutral tooling template for a Node.js 24 LTS service using TypeScript and ECMAScript
+modules. Keep this directory next to the repo's `common/` folder and add service source inside
+it — there's no framework or application code checked in here on purpose.
 
-## Enforced practices
+## What's enforced
 
-### Inherited from `common/`
+### From `common/`
 
-- strict TypeScript with unchecked-index, exact-optional, implicit-return, override, switch,
-  index-signature, unused-code, casing, side-effect-import, and declaration-file checks;
-- explicit and unsafe `any` rejection for `.ts`, `.tsx`, `.mts`, and `.cts`;
-- no generated-code exemption from linting, type checking, formatting, or staged checks;
-- typed promise handling, Error-only throws, exhaustive switches, safe assertions, type-only
-  imports, and descriptive-only `@ts-expect-error` comments;
-- deterministic formatting, conventional commits, Gitleaks, npm audits, exact dependencies,
-  Node/npm version enforcement, real tests, and coverage thresholds; and
-- shared GitLab security, quality, commitlint, test, and build jobs.
+- Strict TypeScript: unchecked-index, exact-optional, implicit-return, override, switch,
+  index-signature, unused-code, casing, side-effect-import, and declaration-file checks are all on.
+- No explicit or unsafe `any` in `.ts`, `.tsx`, `.mts`, or `.cts`. Full stop.
+- Generated code doesn't get a pass — it's linted, type-checked, formatted, and staged-checked
+  exactly like anything written by hand.
+- Typed promise handling, `Error`-only throws, exhaustive switches, safe assertions, type-only
+  imports, and `@ts-expect-error` comments that actually explain themselves instead of just
+  suppressing the error.
+- Deterministic formatting, conventional commits, Gitleaks, npm audits, exact dependency
+  versions, Node/npm version enforcement, real tests, and coverage thresholds.
+- The shared GitLab security, quality, commitlint, test, and build jobs.
 
 ### Node.js backend-specific
 
-- native ESM and NodeNext resolution with explicit emitted `.js` import specifiers;
+- Native ESM with NodeNext resolution, and explicit `.js` specifiers on emitted imports.
 - Node globals, declaration output, source maps, casing safety, production-only build inputs, and
-  runtime entry-point scripts;
-- Error-only throws, required `await` usage, typed asynchronous control flow, and exhaustive
-  switches;
-- validated ports from 1 through 65535 and at least one configured database;
-- protocol restrictions for PostgreSQL, MongoDB, and optional Redis connections; and
-- generic configuration failures that do not leak supplied connection strings.
+  runtime entry-point scripts.
+- `Error`-only throws, required `await` usage, typed asynchronous control flow, and exhaustive
+  switches.
+- Validated ports from 1 through 65535, and at least one configured database.
+- Protocol restrictions on PostgreSQL, MongoDB, and optional Redis connections.
+- Generic configuration failures that never leak a connection string.
 
-## Installation
+## Setting it up
 
-1. Keep this directory and `common/` as siblings, then place service source here.
-2. Install Gitleaks 8.30.x and confirm that `gitleaks version` works locally.
-3. Run `npm install` to install the exact dependency versions and generate `package-lock.json`.
-4. Run `npm run prepare` to install the Husky hooks.
-5. Run `npm run quality`, `npm test`, and `npm run build`.
-6. Commit `package-lock.json` with the adopted configuration.
+1. Put this directory next to `common/`, then add service source here.
+2. Install Gitleaks 8.30.x — run `gitleaks version` to confirm it's actually on `PATH`.
+3. `npm install` to pull the exact dependency versions and generate `package-lock.json`.
+4. `npm run prepare` to wire up the Husky hooks.
+5. Run `npm run quality`, `npm test`, and `npm run build` to confirm it's all green.
+6. Commit `package-lock.json` along with whatever configuration you adopted.
 
-## Merge into an existing project
+## Merging into an existing project
 
-When the target already has a `package.json`, do not replace it wholesale. Copy the other
-template files, merge every script and dependency from this template into the existing manifest,
-and retain service-specific dependencies and metadata. Resolve configuration differences in
-favor of the local standards unless the team has approved a documented exception. Then run
-`npm install`, review the generated lockfile, run `npm run prepare`, and execute the complete
-quality, test, and build sequence.
+If there's already a `package.json`, don't just overwrite it. Copy the other template files over,
+merge each script and dependency into the existing manifest by hand, and keep whatever's genuinely
+service-specific. Where something conflicts, the local standard wins unless the team has signed
+off on an exception. Then run `npm install`, check the lockfile diff, `npm run prepare`, and go
+through the full quality, test, and build sequence.
 
 ## Scripts
 
 | Command                  | Purpose                                                        |
-| ------------------------ | ---------------------------------------------------------------|
+| ------------------------ | -------------------------------------------------------------- |
 | `npm run dev`            | Run `src/index.ts` with tsx in watch mode.                     |
 | `npm run prepare`        | Install the repository's Husky hooks.                          |
 | `npm run quality`        | Run formatting, linting, and TypeScript checks.                |
@@ -64,60 +64,58 @@ quality, test, and build sequence.
 | `npm start`              | Run the compiled `dist/src/index.js` entry point with Node.js. |
 | `npm run security:audit` | Fail on high-severity npm advisories.                          |
 
-GitLab CI also runs commitlint over each merge-request or push commit range, using the shared
-template every stack inherits. See the repository root
-[README's commit linting in CI section](../README.md#commit-linting-in-ci)
-for the full branch-by-branch behavior.
+GitLab CI runs commitlint too, off the same shared logic every stack uses — see the root
+[README's commit linting in CI section](../README.md#commit-linting-in-ci) for the full
+branch-by-branch breakdown.
 
-This bare template has no `src/index.ts`; the build compiles the environment example and its
-tests enforce the configuration boundary. The `dev` and `start` commands become meaningful after
-application source is added.
+This bare template has no `src/index.ts` yet — the build just compiles the environment example,
+and its tests are what enforce the configuration boundary for now. `dev` and `start` only become
+meaningful once real application source shows up.
 
 ## TypeScript and ESM
 
-The package and compiler use native ECMAScript modules with NodeNext resolution. Use explicit
-`.js` extensions for relative imports in TypeScript source so emitted imports resolve in Node.js.
-Keep application source under `src/`; `rootDir` preserves that structure under `dist/` and emits
-source maps and declaration files.
+The package and compiler use native ECMAScript modules with NodeNext resolution. Relative imports
+in TypeScript source need explicit `.js` extensions so the emitted imports actually resolve under
+Node. Keep application source under `src/` — `rootDir` mirrors that layout under `dist/` and emits
+source maps plus declaration files alongside it.
 
 ## Runtime configuration
 
-The environment example parses an explicit object at startup and exports only validated values.
-It requires `NODE_ENV`, a port from 1 through 65535, and at least one valid PostgreSQL or MongoDB
-URL. Redis is optional. Validation failures use a generic error and do not include configuration
-values.
+The environment example parses an explicit object at startup and exports only the validated
+result. It requires `NODE_ENV`, a port from 1 through 65535, and at least one valid PostgreSQL or
+MongoDB URL — Redis is optional. Validation failures raise a generic error; they never echo back
+the configuration values themselves.
 
-The checked-in `.env.example` contains local, non-secret URLs without passwords. Copy it to an
-ignored local environment file and supply deployed values through the approved secret-management
-system. Never commit credentials or pass all of `process.env` beyond the configuration boundary.
+The checked-in `.env.example` has local, non-secret URLs with no passwords. Copy it to an ignored
+local environment file and pull real values from whatever secret-management system the org uses.
+Never commit credentials, and never pass the whole `process.env` past the configuration boundary.
 
 ## Optional infrastructure
 
-PostgreSQL, MongoDB, Redis, and BullMQ are supported service capabilities, not mandatory template
-dependencies. Add only the database client, cache client, or queue library the service actually
-uses. BullMQ requires a Redis connection; services that do not use queues should not install it.
-Keep connection setup behind validated configuration and add integration tests for each adopted
-capability.
+PostgreSQL, MongoDB, Redis, and BullMQ are supported capabilities, not requirements — only add the
+client library a given service actually uses. BullMQ needs a Redis connection behind it, so don't
+pull it in for a service that has no queues. Keep connection setup behind validated config, and
+add an integration test for whatever capability gets adopted.
 
 ## Gitleaks
 
-Download the v8.30.1 release for the development platform from the
-[official Gitleaks releases](https://github.com/gitleaks/gitleaks/releases/tag/v8.30.1), verify it
-according to organization policy, and place the `gitleaks` executable on `PATH`. The pre-commit
-hook fails when `gitleaks` is unavailable, scans the staged diff before lint-staged, and redacts
-findings. GitLab CI independently scans repository history with the pinned 8.30.1 container. Do
-not bypass either control to force a commit or pipeline through.
+Grab the v8.30.1 release for your platform from the
+[official releases page](https://github.com/gitleaks/gitleaks/releases/tag/v8.30.1), verify it
+however your org requires, and put the `gitleaks` binary on `PATH`. Pre-commit refuses to run
+without it. It scans the staged diff before `lint-staged` even runs, and redacts anything it finds
+in the output. GitLab CI does its own independent scan over full repository history with the
+pinned 8.30.1 container. Don't bypass either one just to force a commit or a pipeline through —
+that's the whole control gone.
 
 ### Pre-commit gate
 
-After the Gitleaks scan, the pre-commit hook runs `lint-staged` (formats and lints staged files),
-then `npm run quality` (Prettier `format:check`, ESLint, and TypeScript across the whole project,
-not only staged files), then `npm run build`. A commit is rejected if formatting, linting, type
-checking, or the production build fails, so a broken build cannot reach a deploy pipeline.
+Order matters here: Gitleaks first, then `lint-staged` (formats and lints whatever's staged), then
+`npm run quality` — a full format/lint/typecheck pass over the entire project, not just what was
+touched — and finally `npm run build`. Any of those failing blocks the commit, so a broken build
+never makes it anywhere near a deploy pipeline.
 
-### False-positive review
+### If Gitleaks flags something that isn't real
 
-Investigate each finding and remove any real secret. If a finding is confirmed to be a false
-positive, obtain the required security review before adding a narrowly scoped exception with an
-explanatory comment. Never add a blanket allowlist, and rerun the local and CI scans after any
-exception is approved.
+Look into it before assuming it's a false positive. If it genuinely turns out to be nothing, get
+it reviewed before adding a narrowly scoped exception with a comment explaining why. Don't add a
+blanket allowlist, and re-run both the local and CI scans once the exception is approved.

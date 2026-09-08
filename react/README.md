@@ -1,49 +1,51 @@
 # React engineering standards template
 
-This directory is a tooling template for a React 19, TypeScript, and Vite application. Keep it
-beside the repository's `common/` directory and add the official Vite React TypeScript scaffold
-inside this directory. The template intentionally contains no application source.
+A tooling template for a React 19 + TypeScript + Vite app. Drop the official Vite React
+TypeScript scaffold into this directory and keep it next to the repo's `common/` folder — that's
+it. There's no application source checked in here on purpose.
 
-## Enforced practices
+## What's enforced
 
-### Inherited from `common/`
+### From `common/`
 
-- strict TypeScript with unchecked-index, exact-optional, implicit-return, override, switch,
-  index-signature, unused-code, casing, side-effect-import, and declaration-file checks;
-- explicit and unsafe `any` rejection for `.ts`, `.tsx`, `.mts`, and `.cts`;
-- no generated-code exemption from linting, type checking, formatting, or staged checks;
-- typed promise handling, Error-only throws, exhaustive switches, safe assertions, type-only
-  imports, and descriptive-only `@ts-expect-error` comments;
-- deterministic formatting, conventional commits, Gitleaks, npm audits, exact dependencies,
-  Node/npm version enforcement, real tests, and coverage thresholds; and
-- shared GitLab security, quality, commitlint, test, and build jobs.
+- Strict TypeScript: unchecked-index, exact-optional, implicit-return, override, switch,
+  index-signature, unused-code, casing, side-effect-import, and declaration-file checks are all on.
+- No explicit or unsafe `any` in `.ts`, `.tsx`, `.mts`, or `.cts`. Full stop.
+- Generated code doesn't get a pass — it's linted, type-checked, formatted, and staged-checked
+  exactly like anything written by hand.
+- Typed promise handling, `Error`-only throws, exhaustive switches, safe assertions, type-only
+  imports, and `@ts-expect-error` comments that actually explain themselves instead of just
+  suppressing the error.
+- Deterministic formatting, conventional commits, Gitleaks, npm audits, exact dependency
+  versions, Node/npm version enforcement, real tests, and coverage thresholds.
+- The shared GitLab security, quality, commitlint, test, and build jobs.
 
 ### React-specific
 
-- React 19 JSX-runtime rules without legacy `prop-types` duplication;
-- React Hooks correctness and compiler-oriented hook rules;
-- JSX accessibility checks;
-- browser globals and restricted console use, with warnings treated as failures;
-- Vite environment types and bundler module resolution; and
-- validated `VITE_` configuration restricted to HTTP(S) API URLs and known environments.
+- React 19's JSX runtime rules, without the leftover `prop-types` noise.
+- Hooks correctness plus the compiler-oriented hook rules.
+- JSX accessibility checks.
+- Browser globals are fine, but console use is restricted — and warnings fail here, they don't
+  just get logged and ignored.
+- Vite's environment types and bundler-style module resolution.
+- `VITE_` config is validated so it can only point at HTTP(S) API URLs in a known environment.
 
-## Installation
+## Setting it up
 
-1. Keep this directory and `common/` as siblings, then place the application scaffold here.
-2. Install Gitleaks 8.30.x and confirm that `gitleaks version` works locally.
-3. Run `npm install` to install the exact dependency versions and generate `package-lock.json`.
-4. Run `npm run prepare` to install the Husky hooks.
-5. Run `npm run quality`, `npm test`, and `npm run build`.
-6. Commit `package-lock.json` with the adopted configuration.
+1. Put this directory next to `common/`, then drop the application scaffold in here.
+2. Install Gitleaks 8.30.x — run `gitleaks version` to confirm it's actually on `PATH`.
+3. `npm install` to pull the exact dependency versions and generate `package-lock.json`.
+4. `npm run prepare` to wire up the Husky hooks.
+5. Run `npm run quality`, `npm test`, and `npm run build` to confirm it's all green.
+6. Commit `package-lock.json` along with whatever configuration you adopted.
 
-## Merge into an existing project
+## Merging into an existing project
 
-When the target already has a `package.json`, do not replace it wholesale. Copy the other
-template files, merge every script and dependency from this template into the existing manifest,
-and retain application-specific dependencies and metadata. Resolve configuration differences in
-favor of the local standards unless the team has approved a documented exception. Then run
-`npm install`, review the generated lockfile, run `npm run prepare`, and execute the complete
-quality, test, and build sequence.
+If there's already a `package.json`, don't just overwrite it. Copy the other template files over,
+merge each script and dependency into the existing manifest by hand, and keep whatever's genuinely
+application-specific. Where something conflicts, the local standard wins unless the team has
+signed off on an exception. Then run `npm install`, check the lockfile diff, `npm run prepare`,
+and go through the full quality, test, and build sequence.
 
 ## Scripts
 
@@ -59,38 +61,37 @@ quality, test, and build sequence.
 | `npm run build`          | Create the Vite production build.                             |
 | `npm run security:audit` | Fail on high-severity npm advisories.                         |
 
-GitLab CI also runs commitlint over each merge-request or push commit range, using the shared
-template every stack inherits. See the repository root
-[README's commit linting in CI section](../README.md#commit-linting-in-ci)
-for the full branch-by-branch behavior.
+GitLab CI runs commitlint too, off the same shared logic every stack uses — see the root
+[README's commit linting in CI section](../README.md#commit-linting-in-ci) for the full
+branch-by-branch breakdown.
 
-The build command assumes this template has been copied into a real React application. The empty
-template has no application source, so `vite build` becomes meaningful after the application
-scaffold is present. The checked-in tests verify that malformed or disallowed API URLs produce
-only the generic configuration error and never expose the supplied value or a native URL error.
+Worth knowing: `npm run build` only means something once real application code lives here. Point
+it at this empty template and Vite will fail with a missing entry module — that's expected, not a
+bug (more on that below, under the pre-commit gate). The tests that do exist just check that a
+malformed or disallowed API URL fails with the generic config error, never a raw value or a
+native URL-parsing error.
 
 ## Gitleaks
 
-Download the v8.30.1 release for the development platform from the
-[official Gitleaks releases](https://github.com/gitleaks/gitleaks/releases/tag/v8.30.1), verify it
-according to organization policy, and place the `gitleaks` executable on `PATH`. The pre-commit
-hook fails when `gitleaks` is unavailable, scans the staged diff before lint-staged, and redacts
-findings. GitLab CI independently scans repository history with the pinned 8.30.1 container. Do
-not bypass either control to force a commit or pipeline through.
+Grab the v8.30.1 release for your platform from the
+[official releases page](https://github.com/gitleaks/gitleaks/releases/tag/v8.30.1), verify it
+however your org requires, and put the `gitleaks` binary on `PATH`. Pre-commit refuses to run
+without it. It scans the staged diff before `lint-staged` even runs, and redacts anything it finds
+in the output. GitLab CI does its own independent scan over full repository history with the
+pinned 8.30.1 container. Don't bypass either one just to force a commit or a pipeline through —
+that's the whole control gone.
 
 ### Pre-commit gate
 
-After the Gitleaks scan, the pre-commit hook runs `lint-staged` (formats and lints staged files),
-then `npm run quality` (Prettier `format:check`, ESLint, and TypeScript across the whole project,
-not only staged files), then `npm run build`. A commit is rejected if formatting, linting, type
-checking, or the production build fails, so a broken build cannot reach a deploy pipeline. Because
-this template ships with no application entry point, the hook accepts only the same documented
-`Cannot resolve entry module index.html` build boundary that `verify-all.mjs` accepts; any other
-build failure still blocks the commit.
+Order matters here: Gitleaks first, then `lint-staged` (formats and lints whatever's staged), then
+`npm run quality` — a full format/lint/typecheck pass over the entire project, not just what was
+touched — and finally `npm run build`. Any of those failing blocks the commit. Since this template
+has no entry point yet, the build step makes one specific exception: it accepts the documented
+`Cannot resolve entry module index.html` failure (the same one `verify-all.mjs` accepts) and lets
+the commit through anyway. Any other build failure still stops the commit cold.
 
-### False-positive review
+### If Gitleaks flags something that isn't real
 
-Investigate each finding and remove any real secret. If a finding is confirmed to be a false
-positive, obtain the required security review before adding a narrowly scoped exception with an
-explanatory comment. Never add a blanket allowlist, and rerun the local and CI scans after any
-exception is approved.
+Look into it before assuming it's a false positive. If it genuinely turns out to be nothing, get
+it reviewed before adding a narrowly scoped exception with a comment explaining why. Don't add a
+blanket allowlist, and re-run both the local and CI scans once the exception is approved.

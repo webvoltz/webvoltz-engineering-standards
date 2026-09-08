@@ -94,11 +94,11 @@ local `commit-msg` hook is missing or got bypassed.
 
 ## The three stacks
 
-| Stack             | Framework            | README                                                |
-| ----------------- | --------------------- | ------------------------------------------------------ |
-| `react/`          | React 19 + Vite        | [react/README.md](react/README.md)                     |
-| `nextjs/`         | Next.js App Router      | [nextjs/README.md](nextjs/README.md)                   |
-| `nodejs-backend/` | Node.js ESM service     | [nodejs-backend/README.md](nodejs-backend/README.md)   |
+| Stack             | Framework           | README                                               |
+| ----------------- | ------------------- | ---------------------------------------------------- |
+| `react/`          | React 19 + Vite     | [react/README.md](react/README.md)                   |
+| `nextjs/`         | Next.js App Router  | [nextjs/README.md](nextjs/README.md)                 |
+| `nodejs-backend/` | Node.js ESM service | [nodejs-backend/README.md](nodejs-backend/README.md) |
 
 ## Changing the shared config
 
