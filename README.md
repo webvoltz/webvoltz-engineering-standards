@@ -94,6 +94,27 @@ boundary verification. `--security` additionally queries npm's current advisory 
 
 See each stack README for its additional framework-specific rules.
 
+## GitLab CI commit-message enforcement
+
+Every stack includes the same `.commitlint-template` from `common/gitlab/quality.yml`, so this
+behavior is identical across `react/`, `nextjs/`, and `nodejs-backend/`. GitLab CI runs commitlint
+over each merge-request or push commit range:
+
+- Merge-request pipelines lint the diff between the merge-request's target branch and the commit.
+- Push pipelines with a real before-SHA lint just the pushed commit range.
+- A zero before-SHA on the default branch — the repository's first-ever push — lints every
+  reachable commit in topological parent-before-child order from the root through the pipeline
+  head.
+- Every other zero-before-SHA case (first pushes to non-default branches, tags, schedules, manual
+  runs, and API or triggered pipelines) fetches the default branch and lints every commit after
+  the merge base; when the pipeline commit is itself that base, CI lints its message through
+  stdin instead of scanning history.
+
+This keeps commit-message enforcement authoritative when a local `commit-msg` hook is unavailable
+or bypassed. Workflow rules create merge-request, tag, and branch pipelines while suppressing only
+duplicate branch-push pipelines for open merge requests; scheduled, manual, API, and triggered
+branch pipelines remain available.
+
 ## Per-stack reference
 
 | Stack             | Framework                | README                                     |

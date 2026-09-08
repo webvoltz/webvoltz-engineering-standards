@@ -63,15 +63,10 @@ quality, test, and build sequence.
 | `npm run build`          | Create the Next.js production build with `next build`. |
 | `npm run security:audit` | Fail on high-severity npm advisories.                  |
 
-GitLab CI also runs commitlint over each merge-request or push commit range. A zero-SHA first push
-to the default branch lints every reachable commit in topological parent-before-child order from
-the root to the pipeline head. A zero-SHA first push to another branch fetches the default branch
-and lints every commit after the merge base. Tag, scheduled, and manually started pipelines use
-that same merge-base fallback; when the pipeline commit is itself the base, CI lints its message
-through stdin instead of scanning full history. This keeps commit-message enforcement
-authoritative when a local `commit-msg` hook is unavailable or bypassed. Workflow rules create
-merge-request, tag, and branch pipelines while suppressing only duplicate branch push pipelines
-for open merge requests; scheduled, manual, API, and triggered branch pipelines remain available.
+GitLab CI also runs commitlint over each merge-request or push commit range, using the shared
+template every stack inherits. See the repository root
+[README's GitLab CI commit-message enforcement section](../README.md#gitlab-ci-commit-message-enforcement)
+for the full branch-by-branch behavior.
 
 The empty template builds a framework-provided static 404 route; application routes become part
 of the build after the scaffold is added. The checked-in tests verify that malformed or disallowed

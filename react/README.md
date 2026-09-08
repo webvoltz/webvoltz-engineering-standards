@@ -59,16 +59,10 @@ quality, test, and build sequence.
 | `npm run build`          | Create the Vite production build.                             |
 | `npm run security:audit` | Fail on high-severity npm advisories.                         |
 
-GitLab CI also runs commitlint over each merge-request or push commit range. On an initial push
-pipeline for the default branch, where GitLab supplies a zero before-SHA, CI lints every reachable
-commit in topological parent-before-child order from the root through the pipeline head. Other
-zero-before-SHA pipelines, including first pushes to non-default branches, tags, schedules, and
-manual runs, fetch the default branch and lint every commit after the merge base. When the pipeline
-commit is itself that base, CI lints its message through stdin. This keeps commit-message
-enforcement authoritative when a local `commit-msg` hook is unavailable or bypassed. Workflow
-rules create merge-request, tag, and branch pipelines while suppressing only duplicate branch push
-pipelines for open merge requests; scheduled, manual, API, and triggered branch pipelines remain
-available.
+GitLab CI also runs commitlint over each merge-request or push commit range, using the shared
+template every stack inherits. See the repository root
+[README's GitLab CI commit-message enforcement section](../README.md#gitlab-ci-commit-message-enforcement)
+for the full branch-by-branch behavior.
 
 The build command assumes this template has been copied into a real React application. The empty
 template has no application source, so `vite build` becomes meaningful after the application

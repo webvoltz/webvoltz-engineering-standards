@@ -64,15 +64,10 @@ quality, test, and build sequence.
 | `npm start`              | Run the compiled `dist/src/index.js` entry point with Node.js. |
 | `npm run security:audit` | Fail on high-severity npm advisories.                          |
 
-GitLab CI also runs commitlint over each merge-request or push commit range. For an initial
-default-branch push, it lints every reachable commit in topological parent-before-child order from
-root to the pipeline head. Other first pushes and tags fetch the default branch and lint every
-commit after the merge base. Scheduled and manually started zero-SHA pipelines use that same
-merge-base fallback instead of rescanning default-branch history. When the pipeline commit is
-itself the base, CI lints its message through stdin. This keeps commit-message enforcement
-authoritative when a local `commit-msg` hook is unavailable or bypassed. Workflow rules create
-merge-request, tag, and branch pipelines while suppressing only duplicate branch push pipelines
-for open merge requests; scheduled, manual, API, and triggered branch pipelines remain available.
+GitLab CI also runs commitlint over each merge-request or push commit range, using the shared
+template every stack inherits. See the repository root
+[README's GitLab CI commit-message enforcement section](../README.md#gitlab-ci-commit-message-enforcement)
+for the full branch-by-branch behavior.
 
 This bare template has no `src/index.ts`; the build compiles the environment example and its
 tests enforce the configuration boundary. The `dev` and `start` commands become meaningful after
