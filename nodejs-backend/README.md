@@ -113,6 +113,13 @@ hook fails when `gitleaks` is unavailable, scans the staged diff before lint-sta
 findings. GitLab CI independently scans repository history with the pinned 8.30.1 container. Do
 not bypass either control to force a commit or pipeline through.
 
+### Pre-commit gate
+
+After the Gitleaks scan, the pre-commit hook runs `lint-staged` (formats and lints staged files),
+then `npm run quality` (Prettier `format:check`, ESLint, and TypeScript across the whole project,
+not only staged files), then `npm run build`. A commit is rejected if formatting, linting, type
+checking, or the production build fails, so a broken build cannot reach a deploy pipeline.
+
 ### False-positive review
 
 Investigate each finding and remove any real secret. If a finding is confirmed to be a false

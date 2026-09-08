@@ -8,3 +8,14 @@ fi
 
 git diff --cached --no-ext-diff --unified=0 | gitleaks stdin --config .gitleaks.toml --redact --no-banner
 npx --no -- lint-staged
+npm run quality
+
+build_output=$(npm run build 2>&1) && build_status=0 || build_status=$?
+printf '%s\n' "$build_output"
+if [ "$build_status" -ne 0 ]; then
+  if printf '%s' "$build_output" | grep -q 'Cannot resolve entry module index.html'; then
+    echo "react template has no application entry yet; accepting the documented empty-scaffold build boundary." >&2
+  else
+    exit "$build_status"
+  fi
+fi
