@@ -1,0 +1,3 @@
+# Anything under common/ affects all three stacks at once — changes need sign-off
+# from whoever owns engineering standards, not just any reviewer.
+/common/ @viral-webvoltz
